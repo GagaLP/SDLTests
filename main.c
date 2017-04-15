@@ -66,7 +66,6 @@ void game_init(void) {
 void game_quit(void) {
     SDL_DestroyRenderer(Game.screen.renderer);
     SDL_DestroyWindow(Game.screen.window);
-
     Game.screen.window = NULL;
     Game.screen.renderer = NULL;
 
@@ -84,6 +83,7 @@ int main(int argc, char* argv[]) {
                 case SDL_QUIT: {
                     Game.running = SDL_FALSE;
                 } break;
+                default:break;
             }
         }
 
