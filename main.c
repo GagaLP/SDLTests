@@ -1,55 +1,97 @@
-// Lesson 1
-// Open a SDL window and fill the background with red
-
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
+#include <SDL.h>
 
-#include <SDL2/SDL.h>
+#define SCREEN_w 640
+#define SCREEN_H 480
+#define SCREEN_SCALE 1
+#define SCREEN_NAME "Prototype"
 
-static const int width = 800;
-static const int height = 600;
 
-int main(int argc, char **argv)
-{
-    // Initialize SDL
-    SDL_Init(SDL_INIT_VIDEO);
+void game_quit(void);
+void game_init(void);
 
-    // Create a SDL window
-    SDL_Window *window = SDL_CreateWindow("Hello, SDL2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL);
+struct {
+    // define "attributes"
+    SDL_bool running;
+    struct {
+        unsigned int w;
+        unsigned int h;
+        const char* name;
+        SDL_Window* window;
+        SDL_Renderer* renderer;
+    } screen;
 
-    // Create a renderer (accelerated and in sync with the display refresh rate)
-    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-    SDL_SetRenderDrawColor(renderer, 40, 100, 255, 255);
-    bool running = true;
-    SDL_Event event;
-
-    while(running)
-    {
-        // Process events
-        while(SDL_PollEvent(&event))
+    // define "methods"
+    void (*init)(void);
+    void (*quit)(void);
+} Game = {
+        SDL_FALSE,
         {
-            if(event.type == SDL_QUIT)
-            {
-                running = false;
+                SCREEN_SCALE*SCREEN_w,
+                SCREEN_SCALE*SCREEN_H,
+                SCREEN_NAME,
+                NULL,
+                NULL
+        },
+        game_init,
+        game_quit
+};
+
+void game_init(void) {
+    if(SDL_Init(SDL_INIT_EVERYTHING)!=0) {
+        printf("SDL error -> %sn", SDL_GetError());
+        exit(1);
+    }
+
+    unsigned int w = Game.screen.w;
+    unsigned int h = Game.screen.h;
+    const char* name = Game.screen.name;
+
+    Game.screen.window = SDL_CreateWindow(
+            name,
+            SDL_WINDOWPOS_CENTERED,
+            SDL_WINDOWPOS_CENTERED,
+            w, h, 0
+    );
+    Game.screen.renderer = SDL_CreateRenderer(
+            Game.screen.window, -1,
+            SDL_RENDERER_ACCELERATED|SDL_RENDERER_PRESENTVSYNC
+    );
+
+    Game.running = SDL_TRUE;
+}
+
+
+void game_quit(void) {
+    SDL_DestroyRenderer(Game.screen.renderer);
+    SDL_DestroyWindow(Game.screen.window);
+
+    Game.screen.window = NULL;
+    Game.screen.renderer = NULL;
+
+    SDL_Quit();
+}
+
+int main(int argc, char* argv[]) {
+
+    Game.init();
+
+    SDL_Event event;
+    while(Game.running) {
+        while(SDL_PollEvent(&event)) {
+            switch(event.type) {
+                case SDL_QUIT: {
+                    Game.running = SDL_FALSE;
+                } break;
             }
         }
 
-        // Clear screen
-        SDL_RenderClear(renderer);
-
-        // Draw
-
-        // Show what was drawn
-        SDL_RenderPresent(renderer);
+        SDL_RenderClear(Game.screen.renderer);
+        SDL_RenderPresent(Game.screen.renderer);
     }
 
-    // Release resources
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
+    Game.quit();
 
     return 0;
 }
