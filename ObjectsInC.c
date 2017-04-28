@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #define SCREEN_w 640
 #define SCREEN_H 480
 #define SCREEN_SCALE 1
-#define SCREEN_NAME "Prototype"
+#define SCREEN_NAME "Test"
 
 
 void game_quit(void);
