@@ -45,6 +45,10 @@ int main(int argc, char** argv) {
     while (is_active) {
         while (SDL_WaitEventTimeout(&event, 10)) {
             switch (event.type) {
+                case SDL_KEYDOWN:
+                    if (event.key.keysym.mod == 'q'){
+                        is_active = SDL_FALSE;
+                    }
                 case SDL_QUIT:
                     is_active = SDL_FALSE;
                     break;
