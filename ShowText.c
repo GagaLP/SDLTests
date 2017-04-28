@@ -44,6 +44,7 @@ int main(int argc, char ** argv)
                 if (event.key.keysym.mod == 'q'){
                     quit = true;
                 }
+                break;
             case SDL_QUIT:
                 quit = true;
                 break;

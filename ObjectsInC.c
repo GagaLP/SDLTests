@@ -82,9 +82,10 @@ int main(int argc, char* argv[]) {
         while(SDL_PollEvent(&event)) {
             switch(event.type) {
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.mod == 'q'){
+                    if (event.key.keysym.sym == 'q'){
                         Game.running = SDL_FALSE;
                     }
+                    break;
                 case SDL_QUIT: {
                     Game.running = SDL_FALSE;
                 } break;

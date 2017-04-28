@@ -49,6 +49,7 @@ int main(int argc, char** argv) {
                     if (event.key.keysym.mod == 'q'){
                         is_active = SDL_FALSE;
                     }
+                    break;
                 case SDL_QUIT:
                     is_active = SDL_FALSE;
                     break;

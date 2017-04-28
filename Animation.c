@@ -14,8 +14,7 @@ int main(int argc, char ** argv)
     SDL_Init(SDL_INIT_VIDEO);
     IMG_Init(IMG_INIT_PNG);
 
-    SDL_Window * window = SDL_CreateWindow("SDL2 Sprite Sheets",
-                                           SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
+    SDL_Window * window = SDL_CreateWindow("SDL2 Sprite Sheets", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, 0);
     SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
     SDL_Surface * image = IMG_Load("spritesheet.png");
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, image);
@@ -44,9 +43,10 @@ int main(int argc, char ** argv)
             switch (event.type)
             {
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.mod == 'q'){
+                    if (event.key.keysym.sym == 'q'){
                         quit = true;
                     }
+                    break;
                 case SDL_QUIT:
                     quit = true;
                     break;
