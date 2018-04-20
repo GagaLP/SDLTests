@@ -14,10 +14,10 @@ int main(int argc, char ** argv){
     int height = 500;
     int step = 5;
 
-    playerPos.h = 20;
-    playerPos.w = 20;
-    playerPos.x = 20;
-    playerPos.y = 20;
+    playerPos.h = 50;
+    playerPos.w = 50;
+    playerPos.x = (width - playerPos.h) / 2;
+    playerPos.y = (width - playerPos.w) / 2;
 
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
         printf("Error %s", SDL_GetError());
@@ -92,7 +92,7 @@ int main(int argc, char ** argv){
         SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255 );
 
         // Render our "player"
-        SDL_RenderFillRect(renderer, &playerPos );
+        SDL_RenderFillRect(renderer, &playerPos);
 
         SDL_RenderDrawLine(renderer, 0, 0, 500, 500);
 
@@ -105,11 +105,8 @@ int main(int argc, char ** argv){
         SDL_RenderPresent(renderer);
 
         // Add a 16msec delay to make our game run at ~60 fps
-//        SDL_Delay( 16 );
+        SDL_Delay( 16 );
     }
-
-
-
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

@@ -41,7 +41,7 @@ int main(int argc, char ** argv)
         switch (event.type)
         {
             case SDL_KEYDOWN:
-                if (event.key.keysym.mod == 'q'){
+                if (event.key.keysym.sym == 'q'){
                     quit = true;
                 }
                 break;
