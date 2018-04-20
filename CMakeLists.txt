@@ -8,7 +8,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${SDLTests_SOURCE_DIR}/cmake")
 #link_libraries(/usr/local/lib)
 
 set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_FLAGS "-I/usr/local/include -L/usr/local/lib -lsdl2 -lsdl2_ttf -lsdl2_image")
+set(CMAKE_C_FLAGS "-I/usr/local/include -L/usr/local/lib -lsdl2 -lsdl2_ttf -lsdl2_image -lsdl2_mixer")
 
 #set(SOURCE_FILES main.c OtherTests.c)
 
@@ -21,6 +21,7 @@ add_executable(MoveObjects MoveObjects.c ${SOURCE_FILES})
 add_executable(MoveObjectsBetter MoveObjectsBetter.c ${SOURCE_FILES})
 add_executable(Messageboxes Messageboxes.c ${SOURCE_FILES})
 add_executable(ShowText ShowText.c ${SOURCE_FILES})
+add_executable(playMPThree playMPThree.c ${SOURCE_FILES})
 add_executable(PlayWavFile PlayWavFile.c ${SOURCE_FILES})
 add_executable(TextInputEvent TextInputEvent.c ${SOURCE_FILES})
 
