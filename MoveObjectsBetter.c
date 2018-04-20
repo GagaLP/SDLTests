@@ -146,7 +146,7 @@ int main(int argc, char ** argv){
                             sleep = sleep == 0 ? 16 : 0;
                             break;
                         case 'y':
-                            debugInfo = true;
+                            debugInfo = debugInfo == true ? false : true;
                             break;
                         default :
                             break;
@@ -219,9 +219,11 @@ int main(int argc, char ** argv){
 
         // Add a 16msec delay to make our game run at ~60 fps
         SDL_Delay( sleep );
-        for (int i = 0; i < 5; ++i) {
-            SDL_DestroyTexture(texture[i]);
-            SDL_FreeSurface(surface[i]);
+        if (debugInfo){
+            for (int i = 0; i < 5; ++i) {
+                SDL_DestroyTexture(texture[i]);
+                SDL_FreeSurface(surface[i]);
+            }
         }
     }
 
