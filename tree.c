@@ -18,7 +18,6 @@ void game_init(void);
 void game_quit(void);
 
 struct {
-    // define "attributes"
     SDL_bool running;
     struct {
         unsigned int w;
@@ -45,7 +44,7 @@ struct {
 };
 
 #define ANGLE 20
-#define LENGTH_DEVIDED 1.125
+#define LENGTH_DEVIDE 1.125
 #define FRACTAL_DEPTH 10
 #define LINE_LENGTH 45
 
@@ -88,13 +87,12 @@ void hsv_to_rgb(float *r, float *g, float *b, float h, float s, float v) {
     int i;
     float f, p, q, t;
     if (s == 0) {
-        // achromatic (grey)
         *r = *g = *b = v;
         return;
     }
-    h /= 60;            // sector 0 to 5
+    h /= 60;
     i = (int) floorf(h);
-    f = h - i;            // factorial part of h
+    f = h - i;
     p = v * (1 - s);
     q = v * (1 - s * f);
     t = v * (1 - s * (1 - f));
@@ -124,7 +122,7 @@ void hsv_to_rgb(float *r, float *g, float *b, float h, float s, float v) {
             *g = p * 255;
             *b = v * 255;
             break;
-        default:        // case 5:
+        default:
             *r = v * 255;
             *g = p * 255;
             *b = q * 255;
@@ -185,8 +183,8 @@ void branch(SDL_Point start_point, int depth, double last_angle) {
         double cur_angle_plus = last_angle + ANGLE;
         double cur_angle_minus = last_angle - ANGLE;
 
-        if (pow(LENGTH_DEVIDED, depth) != 0) {
-            length = (LINE_LENGTH / (int) pow(LENGTH_DEVIDED, depth));
+        if (pow(LENGTH_DEVIDE, depth) != 0) {
+            length = (LINE_LENGTH / (int) pow(LENGTH_DEVIDE, depth));
         }
 
         SDL_Point left_vect = get_new_vector(cur_angle_plus, length, start_point);
