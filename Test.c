@@ -12,7 +12,8 @@ int multplikation(int numberOne, int numberTwo);
 int divisoin(int numberOne, int numberTwo);
 
 int main(int argc, char **argv) {
-    PrintExpr(2+2);
+    PrintExpr(2 + 2);
+    PrintExpr(3 * 4);
 
     int test = 4;
     void* heii = &test;

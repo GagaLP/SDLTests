@@ -29,8 +29,8 @@ struct {
 } Game = {
         SDL_FALSE,
         {
-                SCREEN_SCALE*SCREEN_w,
-                SCREEN_SCALE*SCREEN_H,
+                SCREEN_SCALE * SCREEN_w,
+                SCREEN_SCALE * SCREEN_H,
                 SCREEN_NAME,
                 NULL,
                 NULL

@@ -17,10 +17,11 @@ int height = 500;
 int step;
 int playerXVel;
 int playerYVel;
-int sleep;
+int const length = 4;
+Uint32 sleep;
 SDL_Rect playerPos;
-SDL_Surface *surface[5];
-SDL_Texture *texture[5];
+SDL_Surface *surface[length];
+SDL_Texture *texture[length];
 SDL_Renderer *renderer;
 int texW = 0;
 int texH = 0;
@@ -47,14 +48,6 @@ void write(int position, char *text){
     SDL_RenderCopy(renderer, texture[position], NULL, &dstrect);
 }
 
-char* concat(const char *s1, const char *s2) {
-    char *result = malloc(strlen(s1)+strlen(s2)+1);//+1 for the null-terminator
-    //in real code you would check for errors in malloc here
-    strcpy(result, s1);
-    strcat(result, s2);
-    return result;
-}
-
 int main(int argc, char ** argv){
     char buffer[50];
     SDL_Window* window;
@@ -74,8 +67,7 @@ int main(int argc, char ** argv){
 
     font = TTF_OpenFont("arial.ttf", 15);
 
-
-    window = SDL_CreateWindow("Move objects width arrow keys", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN);
+    window = SDL_CreateWindow("Move objects width arrow keys", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_ALLOW_HIGHDPI);
     if (window == NULL){
         printf("Error %s", SDL_GetError());
         return -2;
@@ -104,6 +96,7 @@ int main(int argc, char ** argv){
 
     bool loop = true;
     bool debugInfo = false;
+
     while ( loop ) {
         SDL_Event event;
         while ( SDL_PollEvent( &event ) ) {
@@ -202,15 +195,33 @@ int main(int argc, char ** argv){
             sprintf(buffer, "Playerpos x: %d y: %d", playerPos.x , playerPos.y);
             write(0, buffer);
             sprintf(buffer, "Velocity: %d", step);
-            write(1, buffer);
-            sprintf(buffer, "Sleep: %d", sleep);
             write(2, buffer);
-            sprintf(buffer, "XVel: %d", playerXVel);
+            sprintf(buffer, "Sleep: %d", sleep);
             write(3, buffer);
-            sprintf(buffer, "YVel: %d", playerYVel);
-            write(4, buffer);
+            if (playerXVel < 0 && playerYVel < 0){
+                sprintf(buffer, "Direction: left + up");
+            } else if (playerXVel > 0 && playerYVel < 0){
+                sprintf(buffer, "Direction: right + up");
+            } else if (playerXVel < 0 && playerYVel > 0){
+                sprintf(buffer, "Direction: left + down");
+            } else if (playerXVel > 0 && playerYVel > 0){
+                sprintf(buffer, "Direction: right + down");
+            } else if (playerXVel == 0 && playerYVel > 0){
+                sprintf(buffer, "Direction: down");
+            } else if (playerXVel == 0 && playerYVel < 0){
+                sprintf(buffer, "Direction: up");
+            } else if (playerXVel < 0 && playerYVel == 0){
+                sprintf(buffer, "Direction: left");
+            } else if (playerXVel > 0 && playerYVel == 0){
+                sprintf(buffer, "Direction: right");
+            } else if (playerXVel == 0 && playerYVel == 0){
+                sprintf(buffer, "Direction: none");
+            }
+            write(1, buffer);
         }
 
+//        SDL_SetClipboardText("Gabriel");
+        
         // Change color to black
         SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255 );
 
@@ -220,7 +231,7 @@ int main(int argc, char ** argv){
         // Add a 16msec delay to make our game run at ~60 fps
         SDL_Delay( sleep );
         if (debugInfo){
-            for (int i = 0; i < 5; ++i) {
+            for (int i = 0; i < length; ++i) {
                 SDL_DestroyTexture(texture[i]);
                 SDL_FreeSurface(surface[i]);
             }
