@@ -9,8 +9,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define SCREEN_W 640
-#define SCREEN_H 380
+#define SCREEN_W 680
+#define SCREEN_H 760
 #define SCREEN_SCALE 1
 #define SCREEN_NAME "Fractal tree"
 
@@ -44,7 +44,8 @@ struct {
         game_quit
 };
 
-#define MAX_ITERATION 50
+#define MAX_ITERATION_J 50
+#define MAX_ITERATION_M 50
 
 void game_init(void) {
     if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
@@ -146,8 +147,48 @@ void set_color(int color) {
     SDL_SetRenderDrawColor(Game.screen.renderer, (uint8_t) floorf(r), (uint8_t) floorf(g), (uint8_t) floorf(b), 255);
 }
 
-void mandelbroat(void){
+void julia() {
+    int x_m, y_m;
 
+    SDL_GetMouseState(&x_m, &y_m);
+    double x_mouse = (double) x_m, y_mouse = (double) y_m;
+
+    if (y_mouse > ((double)Game.screen.h / 2)) {
+        y_mouse = (double)Game.screen.h / 2;
+    }
+
+    y_mouse = map_d(y_mouse, 0, ((double)Game.screen.h / 2), -1, 1);
+    x_mouse = map_d(x_mouse, 0, Game.screen.w, -1, 1);
+
+
+    double x_temp;
+    int iteration;
+    double x_new;
+    double  y_new;
+    int color;
+
+    for (int i = 150; i < Game.screen.w + 150; ++i) {
+        for (int j = 0; j < (double)Game.screen.h / 2; ++j) {
+            x_new = map_d(i, 0, Game.screen.w, -2.5, 1);
+            y_new = map_d(j, 0, (double)Game.screen.h / 2, -1, 1);
+
+            iteration = 0;
+
+            while (x_new * x_new + y_new * y_new <= 2 * 2 && iteration < MAX_ITERATION_J) {
+                x_temp = x_new * x_new - y_new * y_new + x_mouse;
+                y_new = 2 * x_new * y_new + y_mouse;
+                x_new = x_temp;
+                iteration++;
+            }
+
+            color = map(iteration, 0, MAX_ITERATION_J, 0, 255);
+            set_color(color);
+            SDL_RenderDrawPoint(Game.screen.renderer, i - 150, j + (int)Game.screen.h / 2);
+        }
+    }
+}
+
+void mandelbroat(void) {
     double x;
     double y;
     double x_temp;
@@ -157,22 +198,22 @@ void mandelbroat(void){
     int color;
 
     for (int i = 0; i < Game.screen.w; ++i) {
-        for (int j = 0; j < Game.screen.h; ++j) {
+        for (int j = 0; j < (double)Game.screen.h / 2; ++j) {
             x_new = map_d(i, 0, Game.screen.w, -2.5, 1);
-            y_new = map_d(j, 0, Game.screen.h, -1, 1);
+            y_new = map_d(j, 0, (double)Game.screen.h / 2, -1, 1);
 
             x = 0.0;
             y = 0.0;
             iteration = 0;
 
-            while (x * x + y * y <= 2 * 2 && iteration < MAX_ITERATION) {
+            while (x * x + y * y <= 2 * 2 && iteration < MAX_ITERATION_M) {
                 x_temp = x * x - y * y + x_new;
                 y = 2 * x * y + y_new;
                 x = x_temp;
                 iteration++;
             }
 
-            color = map(iteration, 0, MAX_ITERATION, 0, 255);
+            color = map(iteration, 0, MAX_ITERATION_M, 0, 255);
             set_color(color);
             SDL_RenderDrawPoint(Game.screen.renderer, i, j);
         }
@@ -199,7 +240,9 @@ int main(void) {
             }
         }
         SDL_RenderClear(Game.screen.renderer);
+
         mandelbroat();
+        julia();
         SDL_SetRenderDrawColor(Game.screen.renderer, 0, 0, 0, 255);
         SDL_RenderPresent(Game.screen.renderer);
         SDL_Delay(16);
