@@ -17,4 +17,5 @@ add_executable(playMPThree playMPThree.c ${SOURCE_FILES})
 add_executable(PlayWavFile PlayWavFile.c ${SOURCE_FILES})
 add_executable(TextInputEvent TextInputEvent.c ${SOURCE_FILES})
 add_executable(tree tree.c ${SOURCE_FILES})
+add_executable(mandelbroat mandelbroat.c ${SOURCE_FILES})
 
