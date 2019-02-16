@@ -19,4 +19,4 @@ add_executable(TextInputEvent TextInputEvent.c ${SOURCE_FILES})
 add_executable(tree tree.c ${SOURCE_FILES})
 add_executable(mandelbroat mandelbroat.c ${SOURCE_FILES})
 add_executable(mandelbroat_vs2 mandelbroat_vs2.c ${SOURCE_FILES})
-
+add_executable(times_tables times_tables.c ${SOURCE_FILES})

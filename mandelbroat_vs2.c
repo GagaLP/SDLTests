@@ -10,7 +10,7 @@
 #define SCREEN_W 680
 #define SCREEN_H 760
 #define SCREEN_SCALE 1
-#define SCREEN_NAME "Fractal tree"
+#define SCREEN_NAME "Mandelbroat / Julia"
 
 void game_init(void);
 
@@ -147,15 +147,16 @@ void set_color(int color) {
 
 void julia(int** array) {
     int x_m, y_m;
+    double half_scrn = (double)Game.screen.h / 2;
 
     SDL_GetMouseState(&x_m, &y_m);
     double x_mouse = (double) x_m, y_mouse = (double) y_m;
 
-    if (y_mouse > ((double)Game.screen.h / 2)) {
-        y_mouse = (double)Game.screen.h / 2;
+    if (y_mouse > (half_scrn)) {
+        y_mouse = half_scrn;
     }
 
-    y_mouse = map_d(y_mouse, 0, ((double)Game.screen.h / 2), -1, 1);
+    y_mouse = map_d(y_mouse, 0, half_scrn, -1, 1);
     x_mouse = map_d(x_mouse, 0, Game.screen.w, -1, 1);
 
 
@@ -166,13 +167,13 @@ void julia(int** array) {
     int color;
 
     for (int i = 150; i < Game.screen.w + 150; ++i) {
-        for (int j = 0; j < Game.screen.h / 2; ++j) {
+        for (int j = 0; j < half_scrn; ++j) {
             x_new = map_d(i, 0, Game.screen.w, -2.5, 1);
-            y_new = map_d(j, 0, (double)Game.screen.h / 2, -1, 1);
+            y_new = map_d(j, 0, half_scrn, -1, 1);
 
             iteration = 0;
 
-            while (x_new * x_new + y_new * y_new <= 2 * 2 && iteration < MAX_ITERATION_J) {
+            while (x_new * x_new + y_new * y_new <= 4 && iteration < MAX_ITERATION_J) {
                 x_temp = x_new * x_new - y_new * y_new + x_mouse;
                 y_new = 2 * x_new * y_new + y_mouse;
                 x_new = x_temp;
@@ -180,8 +181,7 @@ void julia(int** array) {
             }
 
             color = map(iteration, 0, MAX_ITERATION_J, 0, 255);
-            *(*(array + i - 150) + j + Game.screen.h / 2) = color;
-            //SDL_RenderDrawPoint(Game.screen.renderer, i - 150, j + (int)Game.screen.h / 2);
+            *(*(array + i - 150) + j + (int)half_scrn) = color;
         }
     }
 }
@@ -194,11 +194,12 @@ void mandelbroat(int** array) {
     double x_new;
     double  y_new;
     int color;
+    double half_scrn = (double)Game.screen.h / 2;
 
     for (int i = 0; i < Game.screen.w; ++i) {
-        for (int j = 0; j < (double)Game.screen.h / 2; ++j) {
+        for (int j = 0; j < half_scrn; ++j) {
             x_new = map_d(i, 0, Game.screen.w, -2.5, 1);
-            y_new = map_d(j, 0, (double)Game.screen.h / 2, -1, 1);
+            y_new = map_d(j, 0, half_scrn, -1, 1);
 
             x = 0.0;
             y = 0.0;
@@ -213,7 +214,6 @@ void mandelbroat(int** array) {
 
             color = map(iteration, 0, MAX_ITERATION_M, 0, 255);
             *(*(array + i) + j) = color;
-            //SDL_RenderDrawPoint(Game.screen.renderer, i, j);
         }
     }
 }
@@ -261,7 +261,13 @@ int main(void) {
 
     mandelbroat(pixelarray);
 
+//    uint32_t last_time = SDL_GetTicks();
+//    uint32_t cur_time;
+
     while (Game.running) {
+//        cur_time = SDL_GetTicks();
+//        printf("%d\n", cur_time - last_time);
+//        last_time = cur_time;
 
         check_event();
 
@@ -281,4 +287,5 @@ int main(void) {
 
     return EXIT_SUCCESS;
 }
+
 

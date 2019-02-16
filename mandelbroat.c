@@ -5,14 +5,12 @@
 
 #include <SDL2/SDL.h>
 #include <stdbool.h>
-#include <SDL2/SDL_ttf.h>
-#include <string.h>
 #include <stdlib.h>
 
 #define SCREEN_W 680
 #define SCREEN_H 760
 #define SCREEN_SCALE 1
-#define SCREEN_NAME "Fractal tree"
+#define SCREEN_NAME "Mandelbroat / Julia"
 
 void game_init(void);
 
@@ -218,32 +216,36 @@ void mandelbroat(void) {
             SDL_RenderDrawPoint(Game.screen.renderer, i, j);
         }
     }
+}
 
+void check_event(void) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+        if (event.type == SDL_QUIT)
+            Game.running = SDL_FALSE;
+        else if (event.type == SDL_KEYDOWN) {
+            switch (event.key.keysym.sym) {
+                case 'q':
+                    Game.running = SDL_FALSE;
+                    break;
+                default :
+                    break;
+            }
+        }
+    }
 }
 
 int main(void) {
     Game.init();
 
     while (Game.running) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT)
-                Game.running = SDL_FALSE;
-            else if (event.type == SDL_KEYDOWN) {
-                switch (event.key.keysym.sym) {
-                    case 'q':
-                        Game.running = SDL_FALSE;
-                        break;
-                    default :
-                        break;
-                }
-            }
-        }
+        check_event();
+
         SDL_RenderClear(Game.screen.renderer);
 
         mandelbroat();
         julia();
-        SDL_SetRenderDrawColor(Game.screen.renderer, 0, 0, 0, 255);
+
         SDL_RenderPresent(Game.screen.renderer);
         SDL_Delay(16);
     }
