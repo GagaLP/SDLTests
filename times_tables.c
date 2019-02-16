@@ -2,11 +2,6 @@
 // Created by Gabriel Mitterrutzner on 2019-02-15.
 //
 
-//
-// Created by Gabriel Mitterrutzner on 2019-02-12.
-//
-
-
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 #include <stdlib.h>
